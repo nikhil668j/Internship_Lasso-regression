@@ -1,0 +1,138 @@
+// Pseudocode for LASSO REGRESSION //
+
+
+1.Import the numpy, pandas and necessary libraries
+
+2.Define the problem and gather data:
+   
+      problem = "about problem"
+        # The dataset is house price prediction which is a regression problem
+        # SalePrice is the target variable 
+        # based on the no.of rooms, house type, area, and some independent features  predict the house price
+        
+      #no. of rows, columns  (1460, 81)
+      data = load_data("data.csv")
+
+3. Data preprocessing:
+
+      imputed_data = impute_missing_values(data)
+      
+
+4. Feature engineering:
+
+      selected_features = select_features(data)
+      cat_variables = cat_variables(selected_features)
+      num_variables = num_variables( selected_features)
+      normalized_data = normalize(num_variables)
+      dummy_variables = create_dummy_variables(cat_variables )
+      final_df = pd.concat([normalized_data, dummy_variables], axis=1)
+
+
+5. Split the data:
+      train_data, val_data = split_data(final_df, val_size=0.2)
+
+
+6. Implement Lasso regression:
+----------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------
+Inputs:
+
+    x: Feature matrix of size (m, n), where m is the number of records and n is the number of features.
+    y: Target vector of size (m,).
+
+ Function Lasso_Regression(X, y, alpha, max_iter, learning_rate):
+    
+     #Set the max_iter to a large positive value
+     #Set the convergence threshold to a small positive value
+     #Set the learning rate to a small positive value
+
+     beta_hat = np.zeros(x.shape[1]))
+     intercept =0
+
+    # Perform Gradient Descent 
+         for i in range(max_iter):
+
+              # Compute predicted y values
+                  y_pred = x.dot(beta_hat) + intercept
+
+             # Compute error and cost function
+                 error = y_pred - y
+                 Cost Function = 1/m * sum((error) ** 2) + alpha * sum(abs(beta_hat))
+
+             # Compute gradient of cost function
+                for j in range(n):
+
+                   If  beta_hat[j] > 0: 
+                        gradient = -2/m * x[:,j].dot (error) + alpha
+                   else:
+                       gradient = -2/m * x[:,j].dot(error) - alpha
+
+                                    
+                       db= -2/m * sum(y - y_pred)
+ 
+             # Update coefficients using gradient descent
+                  beta_hat = beta_hat - learning_rate * gradient
+        
+             # Update intercept
+                   intercept= intercept - learning_rate * grad db
+        
+             if 
+               change in cost function < convergence threshold:
+               break
+    
+   return coefficients, intercept
+
+# Predict Target variable
+
+   return  X.dot(beta_hat)+intercept
+
+------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------
+7. Train the model:
+     alpha = 0.1
+     max_iterations = 1000
+     model = lasso_Regression(train_data[:, :-1], train_data[:, -1:], alpha, max_iterations)
+
+8. predict:
+     predicted = model.predict(val_data)
+
+9. Evaluate the model:
+       SSE = sum((predicted - val_data[:, -1])**2)
+       SST = sum((val_data[:, -1] - np.mean(val_data[:, -1]))**2)
+       r2_score = 1 - (SSE / SST)
+       adjusted_r2_score = 1-(1-r2_score)*n-1/n-p-1
+       evaluation_score = adjusted_r2_score(val_data, predicted)
+  
+
+10. Fine-tune the model:
+      
+     # Define the range of lambda values to test
+     lambda_range = np.logspace(-5, 5, 11)
+
+     best_lambda = None
+     best_score = float('-inf')
+
+    # Iterate over the lambda values
+    for lambda_val in lambda_range:
+         
+          model = lasso_regression(alpha=lambda_val)
+    
+          model.fit(X_train, y_train)
+   
+          score = model.evaluation_score(X_test, y_test)
+   
+         if score > best_score:
+           best_score = score
+           best_lambda = lambda_val
+    
+
+   # Print the best lambda value and its corresponding score
+     return best_lambda
+
+11.Rebuild the model with best parameters and find the predictions
+
+
+#Finally Deploy the model in a production environment where it can be used to make predictions on new data.
+
+
+
